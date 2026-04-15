@@ -2,6 +2,13 @@
 
 All notable changes to the Chainstack MCP server are documented here. Subscribe to this repo (Watch → Releases) to get notified.
 
+## 2026-04-15
+
+**New tool: `contact_chainstack`**
+
+- Reach out to Chainstack directly from your agent for anything — sales, support, or general questions.
+- No API key required. Agent asks for confirmation before sending; PII is redacted from server logs.
+
 ## 2026-04-09
 
 **Chainstack MCP server is live at `mcp.chainstack.com`**
