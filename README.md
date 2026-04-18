@@ -25,6 +25,7 @@ The agent will fetch the onboarding page and walk you through setup. Works with 
 **API key required** ([get one here](https://console.chainstack.com/user/settings/api-keys)):
 - `get_organization`, `list_projects`, `create_project`, `get_project`, `update_project`, `delete_project`
 - `list_nodes`, `get_node`, `create_node`, `update_node`, `delete_node`, `get_deployment_options`
+- `request_testnet_funds` — top up a testnet address from the Chainstack faucet (12 networks across EVM, Solana, and TON)
 
 ## Two ways to use
 

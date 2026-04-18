@@ -2,6 +2,16 @@
 
 All notable changes to the Chainstack MCP server are documented here. Subscribe to this repo (Watch → Releases) to get notified.
 
+## 2026-04-18
+
+**New tool: `request_testnet_funds`**
+
+- Top up testnet addresses with gas for EVM, Solana, or TON development — directly from your agent.
+- 12 networks: Ethereum Sepolia, Ethereum Hoodi, Base Sepolia, Polygon Amoy, BNB testnet, zkSync Sepolia, Scroll Sepolia, HyperEVM testnet, Plasma testnet, Monad testnet, TON testnet, Solana devnet.
+- The faucet tops an address **up to the per-network cap** — it doesn't send a fixed amount. If the address is already at the cap, the call fails.
+- API key required. Rate-limiting is tracked per organization (24h cooldown).
+- On cooldown, the error includes `nextFaucetAvailable` (ISO 8601) so agents can tell you exactly when to retry.
+
 ## 2026-04-15
 
 **New tool: `contact_chainstack`**
