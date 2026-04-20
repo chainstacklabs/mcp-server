@@ -21,6 +21,7 @@ The agent will fetch the onboarding page and walk you through setup. Works with 
 - `get_doc_page` — fetch full doc page content
 - `get_platform_status` — check platform status and incidents
 - `contact_chainstack` — send a message to Chainstack (sales, support, or general questions)
+- `get_chainstack_pricing` — live pricing snapshot: plan tiers, feature matrix, add-ons, and the per-chain dedicated-node catalog
 
 **API key required** ([get one here](https://console.chainstack.com/user/settings/api-keys)):
 - `get_organization`, `list_projects`, `create_project`, `get_project`, `update_project`, `delete_project`
