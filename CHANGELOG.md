@@ -2,6 +2,16 @@
 
 All notable changes to the Chainstack MCP server are documented here. Subscribe to this repo (Watch → Releases) to get notified.
 
+## 2026-04-20
+
+**New tool: `get_chainstack_pricing`**
+
+- Ask your agent anything about Chainstack pricing and get an answer grounded in live data — no guessing, no stale quotes.
+- Covers plan tiers (Developer through Enterprise + Pay As You Go), the feature matrix, add-on pricing (Unlimited Node, Yellowstone gRPC, Warp transactions), and the full per-chain dedicated-node catalog (~87 user-orderable SKUs with regions, hardware flavors, hourly and monthly USD prices).
+- Regions come with a slug → city legend (`sgp1` → Singapore, `fra1` → Frankfurt, etc.).
+- No API key required. Every call fetches fresh from the public pricing sources — the server holds zero hardcoded pricing data, so changes on chainstack.com show up immediately.
+- Example prompts: *"I expect 50M RU/month and need archive data — which plan fits?"*, *"How much is a dedicated Ethereum archive node in London?"*, *"Pro + Unlimited Node 250 RPS + 1000 Warp transactions — total monthly?"*
+
 ## 2026-04-18
 
 **New tool: `request_testnet_funds`**
