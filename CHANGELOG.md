@@ -6,7 +6,7 @@ All notable changes to the Chainstack MCP server are documented here. Subscribe 
 
 **Pi coding agent support + clearer tool description**
 
-- [Pi](https://shittycodingagent.ai/) coding agent users can now install the Chainstack skill: `curl -o ~/.agents/skills/chainstack/SKILL.md https://mcp.chainstack.com/skill`. All MCP server tools work via Pi's bash and the public HTTP endpoint.
+- [Pi](https://pi.dev/) coding agent users can now install the Chainstack skill: `curl -o ~/.agents/skills/chainstack/SKILL.md https://mcp.chainstack.com/skill`. All MCP server tools work via Pi's bash and the public HTTP endpoint.
 - Pi uses the Skill route only — Pi [rejects MCP servers by design](https://mariozechner.at/posts/2025-11-02-what-if-you-dont-need-mcp/). The discovery page at `mcp.chainstack.com` now flags this so Pi users skip the wrong setup path.
 - Discovery page description now mentions pricing and testnet funds. Agents reading `mcp.chainstack.com` see the full tool surface: deploy and manage blockchain nodes, search protocol docs and RPC references, check platform status, get pricing, request testnet funds, and reach Chainstack's team.
 
