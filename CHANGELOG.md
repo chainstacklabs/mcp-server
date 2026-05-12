@@ -2,6 +2,13 @@
 
 All notable changes to the Chainstack MCP server are documented here. Subscribe to this repo (Watch → Releases) to get notified.
 
+## 2026-05-12
+
+**Safer tool execution + accurate server identity**
+
+- Every Chainstack MCP tool now advertises standard [MCP tool annotations](https://modelcontextprotocol.io/specification/2025-06-18/server/tools) (`readOnlyHint`, `destructiveHint`, `openWorldHint`). Compatible clients (ChatGPT, Claude Code, Cursor, Windsurf) use these to skip confirmation prompts on read-only calls (docs search, status, pricing) and require explicit user approval on writes and deletes (creating/updating/deleting projects and nodes, sending contact messages, requesting testnet funds).
+- `serverInfo.version` on the MCP `initialize` handshake now reports the actual Chainstack release version (e.g. `1.8.1`) instead of the underlying FastMCP library version. Surfaces in Claude Code, Codex, Cursor, Windsurf, Gemini CLI, GitHub Copilot, Antigravity, Claude.ai, and ChatGPT — wherever the connected MCP server's identity is shown.
+
 ## 2026-04-27
 
 **Pi coding agent support + clearer tool description**
