@@ -2,6 +2,13 @@
 
 All notable changes to the Chainstack MCP server are documented here. Subscribe to this repo (Watch → Releases) to get notified.
 
+## 2026-05-22
+
+**Google Antigravity 2.0 support**
+
+- All three Google Antigravity surfaces — **Antigravity CLI** (the new `agy` terminal tool), **Antigravity** (the standalone desktop app), and **Antigravity IDE** — are now explicitly listed as supported on the [discovery page at mcp.chainstack.com](https://mcp.chainstack.com/) — in the skill install table, the install example, and the MCP registration block. All three share the same `~/.gemini/antigravity/mcp_config.json` config file and the same `~/.agents/skills/chainstack/` skill directory.
+- Gemini CLI users — heads up: Google [announced](https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/) at I/O 2026 that Gemini CLI is being retired on 2026-06-18 in favor of Antigravity CLI. Both are already supported with separate setup blocks on the discovery page; the migration is mostly seamless because they share the same MCP config path.
+
 ## 2026-05-12
 
 **Safer tool execution + accurate server identity**
