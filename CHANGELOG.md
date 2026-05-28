@@ -2,6 +2,14 @@
 
 All notable changes to the Chainstack MCP server are documented here. Subscribe to this repo (Watch → Releases) to get notified.
 
+## 2026-05-28
+
+**Typed output schemas for every tool**
+
+- Every Chainstack MCP tool now publishes a typed [`outputSchema`](https://modelcontextprotocol.io/specification/2025-11-25/server/tools#output-schema) describing the fields it returns — e.g. `Project` declares `id`, `name`, `description`, `networks` (int), `created_at`, `creator`; `Node` carries typed `https_endpoint`, `wss_endpoint`, `api_namespaces`, `cloud`, `blockchain`. Agents consuming MCP structured output can extract data without guessing at field names.
+- List-returning tools (`list_projects`, `list_nodes`, `get_deployment_options`, `search_docs`) now emit `structuredContent` alongside the existing text content — additive change. Clients that ignored it before keep working unchanged.
+- No behavior change to existing tool calls. All 18 tools verified end-to-end against the live Chainstack API.
+
 ## 2026-05-22
 
 **Google Antigravity 2.0 support**
