@@ -2,6 +2,16 @@
 
 All notable changes to the Chainstack MCP server are documented here. Subscribe to this repo (Watch → Releases) to get notified.
 
+## 2026-06-02
+
+**Migrate to Chainstack from another RPC provider**
+
+- Ask your agent to move a project to Chainstack from another RPC provider — QuickNode, Alchemy, or any other — and it now runs the full migration: it fetches the `migrate-to-chainstack-with-ai` runbook, scans your project for non-Chainstack endpoints, estimates your equivalent Chainstack cost and savings, and repoints your endpoints after you approve.
+- Savings are computed from the live `get_chainstack_pricing` snapshot (which already carries the QuickNode/Alchemy → Request Unit conversion multipliers) — no hardcoded pricing.
+- QuickNode usage is read automatically via its Admin API (`/v0/usage/rpc`); Alchemy or any other provider without a usage API is read from a dashboard screenshot or the numbers you provide.
+- The `chainstack` skill adds a "Migrate from another provider" workflow (skill v1.3).
+- No new tool — this reuses the existing docs, pricing, and deployment tools.
+
 ## 2026-05-28
 
 **Typed output schemas for every tool**
