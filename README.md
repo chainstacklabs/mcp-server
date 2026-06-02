@@ -32,10 +32,13 @@ The agent will fetch the onboarding page and walk you through setup. Works with 
 
 ### Option 1: Install as a skill (lean context)
 
+Cross-agent, via the [`skills`](https://github.com/vercel-labs/skills) CLI — it auto-detects your installed agent (50+ supported, including Claude Code, Cursor, Codex, Windsurf, Antigravity, GitHub Copilot, Pi, and OpenCode):
+
 ```bash
-mkdir -p ~/.claude/skills/chainstack
-curl -o ~/.claude/skills/chainstack/SKILL.md https://mcp.chainstack.com/skill
+npx skills add chainstacklabs/mcp-server
 ```
+
+This installs the bundled [`skills/chainstack`](skills/chainstack/SKILL.md) skill.
 
 ### Option 2: Register as an MCP server
 
