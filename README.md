@@ -4,6 +4,9 @@ The Chainstack MCP server gives AI agents direct access to the Chainstack platfo
 
 **Live at [`mcp.chainstack.com`](https://mcp.chainstack.com)**
 
+[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](cursor://anysphere.cursor-deeplink/mcp/install?name=chainstack&config=eyJ0eXBlIjogImh0dHAiLCAidXJsIjogImh0dHBzOi8vbWNwLmNoYWluc3RhY2suY29tL21jcCJ9)
+[![Add to VS Code](https://img.shields.io/badge/Add_to-VS_Code-0098FF?logo=visualstudiocode&logoColor=white)](vscode:mcp/install?%7B%22name%22%3A%20%22chainstack%22%2C%20%22type%22%3A%20%22http%22%2C%20%22url%22%3A%20%22https%3A//mcp.chainstack.com/mcp%22%7D)
+
 ## Quick start
 
 Type this into any AI agent:
@@ -31,6 +34,14 @@ The agent will fetch the onboarding page and walk you through setup. Works with 
 ## Two ways to use
 
 ### Option 1: Install as a skill (lean context)
+
+Cross-agent, via the [`skills`](https://github.com/vercel-labs/skills) CLI (auto-detects Claude Code, Cursor, Codex, OpenCode):
+
+```bash
+npx skills add chainstacklabs/mcp-server
+```
+
+This installs the bundled [`skills/chainstack`](skills/chainstack/SKILL.md) skill. Or fetch the always-current skill file directly (Claude Code):
 
 ```bash
 mkdir -p ~/.claude/skills/chainstack
