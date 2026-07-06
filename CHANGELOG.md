@@ -2,6 +2,13 @@
 
 All notable changes to the Chainstack MCP server are documented here. Subscribe to this repo (Watch → Releases) to get notified.
 
+## 2026-07-06
+
+**Alchemy migration: usage read via the Alchemy CLI**
+
+- Migrating from Alchemy now reads your usage programmatically through the [Alchemy CLI](https://www.alchemy.com/docs/alchemy-cli) (`alchemy --json usage summary`). It returns your 30-day spend and compute-unit volume, which feeds the Chainstack savings estimate.
+- The `chainstack` skill's "Migrate from another provider" workflow updated to use it (skill v1.4). No new tool.
+
 ## 2026-06-02
 
 **Migrate to Chainstack from another RPC provider**
