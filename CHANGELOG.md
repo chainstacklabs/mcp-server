@@ -2,6 +2,15 @@
 
 All notable changes to the Chainstack MCP server are documented here. Subscribe to this repo (Watch → Releases) to get notified.
 
+## 2026-07-23
+
+**Testnet faucet: supported networks advertised, aliases accepted**
+
+- `request_testnet_funds` now publishes its supported testnets as a schema `enum`, so your agent picks a valid network id up front instead of guessing — testnet requests land on the first try instead of failing on a wrong-network name.
+- Common near-miss spellings are accepted and normalized to the canonical id (`ethereum-sepolia` → `sepolia`, `base-sepolia` → `base`, `solana-devnet` → `solana`, underscores → hyphens), so a slightly-off name still delivers the funds.
+- Supported testnets: `sepolia`, `hoodi`, `base`, `amoy`, `bnb-testnet`, `zksync-testnet`, `scroll-sepolia-testnet`, `hyperevm`, `plasma`, `monad`, `ton`, `solana` (Solana devnet).
+- No new tool, and no change to how you call it.
+
 ## 2026-07-06
 
 **Alchemy migration: usage read via the Alchemy CLI**
