@@ -2,6 +2,14 @@
 
 All notable changes to the Chainstack MCP server are documented here. Subscribe to this repo (Watch → Releases) to get notified.
 
+## 2026-07-27
+
+**Testnet faucet: Robinhood Chain testnet added, Scroll Sepolia removed**
+
+- `request_testnet_funds` now supports **Robinhood Chain testnet** — request with `network="robinhood"` (tops up to 1 ETH). Common aliases resolve automatically: `robinhood-chain`, `robinhood-testnet`, `robinhood-chain-testnet` → `robinhood`.
+- **Scroll Sepolia** (`scroll-sepolia-testnet`) is retired from the faucet, so it's no longer a supported network — the tool returns a clean error listing the current networks.
+- Still 12 supported testnets; this is a 1-for-1 swap.
+
 ## 2026-07-23
 
 **Testnet faucet: supported networks advertised, aliases accepted**
