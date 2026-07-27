@@ -2,7 +2,7 @@
 name: chainstack
 description: Work with the Chainstack MCP server to manage blockchain nodes and projects. Use when deploying nodes, migrating to Chainstack from another RPC provider such as QuickNode or Alchemy, checking platform status, searching Chainstack docs, contacting the Chainstack team, or interacting with the Chainstack platform API via MCP or curl.
 metadata:
-  version: "1.3"
+  version: "1.5"
 ---
 
 # Chainstack MCP Server
@@ -119,7 +119,7 @@ team is open to customizations beyond what's listed in the docs; they explicitly
 Call `request_testnet_funds(network, address)` to top up a testnet address.
 
 - `network`: one of `sepolia`, `hoodi`, `base`, `amoy`, `bnb-testnet`,
-  `zksync-testnet`, `scroll-sepolia-testnet`, `hyperevm`, `plasma`, `monad`, `ton`,
+  `zksync-testnet`, `robinhood`, `hyperevm`, `plasma`, `monad`, `ton`,
   or `solana`.
 - `address`: destination address. EVM hex for EVM chains, TON address for `ton`,
   base58 public key for `solana`. Validated server-side.
@@ -200,9 +200,14 @@ Estimating savings:
   dashboard.quicknode.com/api-keys and export it locally (`export QUICKNODE_API_KEY=...`),
   then pass `-H "x-api-key: $QUICKNODE_API_KEY"` in curl. Never ask the user to paste the
   key into chat.
-- **Alchemy** — no usage API; the smoothest path is a **screenshot**: have the user
-  share their dashboard Usage / Billing screenshot and read the Compute Units, plan,
-  and spend from the image (typing the numbers works too).
+- **Alchemy** — usage is readable via the Alchemy CLI (`@alchemy/cli`). Have the user
+  install it (`npm i -g @alchemy/cli`, needs Node.js 22+) and run `alchemy auth login` once (a browser sign-in to
+  their own account — there's no headless API-key path for `usage`), then
+  `alchemy --json usage summary`. Read `.data.totals.last30Days.usd` (spend) and
+  `.data.totals.last30Days.amount` (compute units); `.data.usageLimit` is their plan cap.
+  Per-network trend: `alchemy --json usage timeseries --granularity day
+  --metrics usd,amount --group-by network --start-date <date>`. If they'd rather not install the CLI, a
+  **screenshot** of the dashboard Usage/Billing page still works.
 - Either way, call `get_chainstack_pricing` for the Chainstack side — `pricing.md`
   already carries the QuickNode/Alchemy → RU conversion multipliers and the migration
   savings framing. Do the arithmetic from that live snapshot; don't hardcode numbers.
