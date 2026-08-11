@@ -1,16 +1,32 @@
 name: Publish to MCP Registry
 
-# Manual-only until the MCP_PRIVATE_KEY secret is configured. Once it is, add:
-#   push:
-#     branches: [main]
-#     paths: ["server.json"]
-# so a version bump in server.json republishes automatically.
+# Keeps the registry entry in step with what is actually deployed.
+#
+# The version is DERIVED from the live server card at publish time, never stored
+# here — mcp.chainstack.com renders it from the deployed chart's APP_VERSION, so
+# it is the single source of truth. The `version` field in server.json is a
+# placeholder that this workflow overwrites in the runner; do not trust it as a
+# record of what is published (query the registry for that).
+#
+# Same principle as the chainstack.com/.well-known/mcp* Worker proxy (DEVEX-296):
+# don't keep a second copy of a value that something else already owns.
+#
+# Requires the MCP_PRIVATE_KEY secret (Ed25519 private key whose public half is
+# the v=MCPv1 TXT record on chainstack.com — see MKT-1375).
+
 on:
   workflow_dispatch:
+  schedule:
+    # Daily. No push event here reflects a prod deploy: releases are chart bumps
+    # in chainstack/platform-infrastructure, a different repo.
+    - cron: "17 7 * * *"
 
 env:
   MCP_PUBLISHER_VERSION: v1.8.1
   MCP_PUBLISHER_SHA256: a06c9096dcb9727c13555b6be26c7effa707b01f06a4c561ba7a3635443cf2cc
+  SERVER_NAME: com.chainstack/chainstack
+  UPSTREAM_CARD: https://mcp.chainstack.com/.well-known/mcp.json
+  REGISTRY_API: https://registry.modelcontextprotocol.io/v0.1/servers
 
 jobs:
   publish:
@@ -34,11 +50,67 @@ jobs:
           echo "${MCP_PUBLISHER_SHA256}  mcp-publisher.tar.gz" | sha256sum -c -
           tar xz -f mcp-publisher.tar.gz mcp-publisher
 
+      - name: Resolve deployed and published versions
+        id: versions
+        run: |
+          set -euo pipefail
+
+          card="$(curl -fsSL "${UPSTREAM_CARD}")"
+          live="$(printf '%s' "${card}" | jq -r '.version // empty')"
+          live_name="$(printf '%s' "${card}" | jq -r '.name // empty')"
+
+          # Fail loudly rather than publishing something wrong.
+          if [ -z "${live}" ]; then
+            echo "::error::No version in the live server card at ${UPSTREAM_CARD}"
+            exit 1
+          fi
+          if [ "${live_name}" != "${SERVER_NAME}" ]; then
+            echo "::error::Live card identifies as '${live_name}', expected '${SERVER_NAME}'"
+            exit 1
+          fi
+
+          published="$(curl -fsSL "${REGISTRY_API}?search=${SERVER_NAME}&version=latest" \
+            | jq -r --arg n "${SERVER_NAME}" '.servers[]? | select(.server.name == $n) | .server.version' \
+            | head -n1)"
+
+          echo "deployed=${live}"      >> "$GITHUB_OUTPUT"
+          echo "published=${published}" >> "$GITHUB_OUTPUT"
+
+          if [ "${live}" = "${published}" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Registry already at ${published}; nothing to publish."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "Registry at '${published:-none}', deployed is ${live}; publishing."
+          fi
+
+      - name: Set version in server.json
+        if: steps.versions.outputs.changed == 'true'
+        run: |
+          set -euo pipefail
+          jq --arg v "${{ steps.versions.outputs.deployed }}" '.version = $v' server.json > server.tmp.json
+          mv server.tmp.json server.json
+          cat server.json
+
       - name: Validate server.json
+        if: steps.versions.outputs.changed == 'true'
         run: ./mcp-publisher validate server.json
 
       - name: Authenticate to MCP Registry
+        if: steps.versions.outputs.changed == 'true'
         run: ./mcp-publisher login dns --domain chainstack.com --private-key "${{ secrets.MCP_PRIVATE_KEY }}"
 
       - name: Publish server to MCP Registry
+        if: steps.versions.outputs.changed == 'true'
         run: ./mcp-publisher publish server.json
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "| | |"
+            echo "|---|---|"
+            echo "| Deployed | \`${{ steps.versions.outputs.deployed }}\` |"
+            echo "| Registry (before) | \`${{ steps.versions.outputs.published }}\` |"
+            echo "| Published this run | ${{ steps.versions.outputs.changed }} |"
+          } >> "$GITHUB_STEP_SUMMARY"

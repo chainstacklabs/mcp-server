@@ -48,6 +48,16 @@ claude mcp add --transport http chainstack https://mcp.chainstack.com/mcp -s use
 
 See [full setup guide](https://docs.chainstack.com/docs/chainstack-mcp-server) for all agents.
 
+## MCP registry
+
+Published to the official [MCP Registry](https://registry.modelcontextprotocol.io) as `com.chainstack/chainstack`:
+
+```bash
+curl "https://registry.modelcontextprotocol.io/v0.1/servers?search=com.chainstack/chainstack&version=latest"
+```
+
+[`server.json`](server.json) is the manifest. Its `version` field is a placeholder — the publish workflow derives the real value from the live server card at `mcp.chainstack.com`, which renders it from the deployed chart, so the registry entry cannot drift from what is actually running. Query the registry, not this file, to see what is published.
+
 ## Issues & feature requests
 
 Use [Issues](https://github.com/chainstacklabs/chainstack-mcp/issues) to:
