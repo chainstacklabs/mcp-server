@@ -16,7 +16,7 @@
       "headers": [
         {
           "name": "Authorization",
-          "description": "Chainstack API key as a Bearer token. Optional — docs search, platform status, pricing, and contact tools work without it.",
+          "description": "Chainstack API key as a Bearer token. Optional — search_docs, get_doc_page, get_platform_status, get_chainstack_pricing and contact_chainstack work without it. Required for the platform tools (projects, nodes, organization, deployment options) and request_testnet_funds.",
           "isRequired": false,
           "isSecret": true
         }
