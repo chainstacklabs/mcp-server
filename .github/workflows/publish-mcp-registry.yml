@@ -3,22 +3,20 @@ name: Publish to MCP Registry
 # Keeps the registry entry in step with what is actually deployed.
 #
 # The version is DERIVED from the live server card at publish time, never stored
-# here — mcp.chainstack.com renders it from the deployed chart's APP_VERSION, so
-# it is the single source of truth. The `version` field in server.json is a
-# placeholder that this workflow overwrites in the runner; do not trust it as a
-# record of what is published (query the registry for that).
+# here — mcp.chainstack.com reports the version it is actually running, so it is
+# the single source of truth. The `version` field in server.json is a placeholder
+# that this workflow overwrites in the runner; query the registry to see what is
+# actually published. The point is to avoid keeping a second copy of a value
+# something else already owns.
 #
-# Same principle as the chainstack.com/.well-known/mcp* Worker proxy (DEVEX-296):
-# don't keep a second copy of a value that something else already owns.
-#
-# Requires the MCP_PRIVATE_KEY secret (Ed25519 private key whose public half is
-# the v=MCPv1 TXT record on chainstack.com — see MKT-1375).
+# Requires the MCP_PRIVATE_KEY secret: the Ed25519 private key whose public half
+# is published as the v=MCPv1 TXT record on chainstack.com.
 
 on:
   workflow_dispatch:
   schedule:
-    # Daily. No push event here reflects a prod deploy: releases are chart bumps
-    # in chainstack/platform-infrastructure, a different repo.
+    # Daily. Nothing in this repo changes when a new server version ships, so
+    # there is no push event to hook.
     - cron: "17 7 * * *"
 
 env:
