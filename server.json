@@ -1,0 +1,26 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.chainstack/chainstack",
+  "title": "Chainstack",
+  "description": "Deploy and manage blockchain nodes across 70+ protocols, search docs, request testnet funds.",
+  "version": "1.10.10",
+  "websiteUrl": "https://docs.chainstack.com/docs/chainstack-mcp-server",
+  "repository": {
+    "url": "https://github.com/chainstacklabs/mcp-server",
+    "source": "github"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.chainstack.com/mcp",
+      "headers": [
+        {
+          "name": "Authorization",
+          "description": "Chainstack API key as a Bearer token. Optional — docs search, platform status, pricing, and contact tools work without it.",
+          "isRequired": false,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}
