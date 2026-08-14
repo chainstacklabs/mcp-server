@@ -61,7 +61,7 @@ See [full setup guide](https://docs.chainstack.com/docs/chainstack-mcp-server) f
 
 Listed in both public registries as `com.chainstack/chainstack`:
 
-- [GitHub MCP Registry](https://github.com/mcp/com.chainstack/chainstack) — the catalog GitHub Copilot and VS Code surface, with one-click install into VS Code
+- [GitHub MCP Registry](https://github.com/mcp/com.chainstack/chainstack) — the catalog VS Code surfaces in its Extensions view, with one-click install
 - [MCP Registry](https://registry.modelcontextprotocol.io) — the official registry that MCP clients read from
 
 ```bash
