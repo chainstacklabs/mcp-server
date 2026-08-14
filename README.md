@@ -42,15 +42,27 @@ This installs the bundled [`skills/chainstack`](skills/chainstack/SKILL.md) skil
 
 ### Option 2: Register as an MCP server
 
+**VS Code** — Chainstack is in the GitHub MCP Registry, so VS Code installs it for you. Two ways:
+
+- **From inside VS Code** — open the Extensions view (`⇧⌘X` / `Ctrl+Shift+X`), search `@mcp chainstack`, and click **Install**. Right-click and choose **Install in Workspace** to write `.vscode/mcp.json` instead of your user profile.
+- **From the registry** — open the [Chainstack entry](https://github.com/mcp/com.chainstack/chainstack) and click **Install** > **Install in VS Code**.
+
+Neither needs an API key, which covers every tool that works unauthenticated.
+
+**Anywhere else:**
+
 ```bash
 claude mcp add --transport http chainstack https://mcp.chainstack.com/mcp -s user
 ```
 
 See [full setup guide](https://docs.chainstack.com/docs/chainstack-mcp-server) for all agents.
 
-## MCP registry
+## MCP registries
 
-Published to the official [MCP Registry](https://registry.modelcontextprotocol.io) as `com.chainstack/chainstack`:
+Listed in both public registries as `com.chainstack/chainstack`:
+
+- [GitHub MCP Registry](https://github.com/mcp/com.chainstack/chainstack) — the catalog GitHub Copilot and VS Code surface, with one-click install into VS Code
+- [MCP Registry](https://registry.modelcontextprotocol.io) — the official registry that MCP clients read from
 
 ```bash
 curl "https://registry.modelcontextprotocol.io/v0.1/servers?search=com.chainstack/chainstack&version=latest"
@@ -60,7 +72,7 @@ curl "https://registry.modelcontextprotocol.io/v0.1/servers?search=com.chainstac
 
 ## Issues & feature requests
 
-Use [Issues](https://github.com/chainstacklabs/chainstack-mcp/issues) to:
+Use [Issues](https://github.com/chainstacklabs/mcp-server/issues) to:
 - Report bugs or unexpected behavior
 - Request new tools or features
 - Suggest improvements to any Chainstack product
