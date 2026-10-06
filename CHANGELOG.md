@@ -2,6 +2,15 @@
 
 All notable changes to the Chainstack MCP server are documented here. Subscribe to this repo (Watch → Releases) to get notified.
 
+## 2026-10-06
+
+**Dependency refresh, 30-minute idle sessions, more memory headroom**
+
+- Dependencies re-locked on the FastMCP 3.x line: FastMCP 3.4.8, MCP Python SDK 1.30.0, Starlette 1.7.0, plus updated transitive packages (PyJWT, cryptography, AnyIO, python-multipart, Authlib, pydantic-settings, idna, urllib3). This resolves every open dependency security advisory for the server.
+- Idle MCP sessions are now closed after 30 minutes of inactivity (the MCP SDK default). A client that resumes a stale session receives `404` and should re-initialize; Claude Code, Cursor, Codex and other spec-compliant clients do this automatically.
+- Server memory limits raised to reduce restarts under heavy traffic.
+- No new tools, no change to how you call existing ones.
+
 ## 2026-07-27
 
 **Testnet faucet: Robinhood Chain testnet added, Scroll Sepolia removed**
