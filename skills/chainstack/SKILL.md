@@ -1,8 +1,8 @@
 ---
 name: chainstack
-description: Work with the Chainstack MCP server to manage blockchain nodes and projects. Use when deploying nodes, migrating to Chainstack from another RPC provider such as QuickNode or Alchemy, checking platform status, searching Chainstack docs, contacting the Chainstack team, or interacting with the Chainstack platform API via MCP or curl.
+description: Work with the Chainstack MCP server to manage blockchain nodes and projects. Use when deploying nodes, restricting node access with IP or origin allowlists, migrating to Chainstack from another RPC provider such as QuickNode or Alchemy, checking platform status, searching Chainstack docs, contacting the Chainstack team, or interacting with the Chainstack platform API via MCP or curl.
 metadata:
-  version: "1.5"
+  version: "1.6"
 ---
 
 # Chainstack MCP Server
@@ -22,6 +22,7 @@ The server has two tiers of access from the same endpoint.
 
 **API key required** (pass `Bearer <chainstack-api-key>`):
 - All platform tools: `get_organization`, `list_projects`, `create_project`, `get_project`, `update_project`, `delete_project`, `list_nodes`, `get_node`, `create_node`, `update_node`, `delete_node`, `get_deployment_options`
+- Node access rules: `list_node_access_rules`, `create_node_access_rule`, `update_node_access_rule`, `delete_node_access_rule`, `set_node_access_rules_status`
 - `request_testnet_funds` — top up a testnet address from Chainstack's faucet
 
 Get an API key at https://console.chainstack.com/user/settings/api-keys
@@ -93,6 +94,44 @@ Projects are containers for nodes.
 - `get_node(node_id)` — full details including cloud, blockchain, API namespaces
 - `update_node(node_id, name)` — rename a node
 - `delete_node(node_id)` — irreversible, deletes the node
+
+### Restrict node access (access rules)
+
+Access rules limit who can call a node's endpoints, by client IP or by the browser's
+`Origin` header. They work on Global nodes only (`node_tier: "Global"`), and creating
+them needs a paid plan; the Developer plan can't create them.
+
+- `list_node_access_rules(node_id, rule_type?, status?)` — rules plus a note on what's enforced
+- `create_node_access_rule(node_id, rule_type, value, activate=False)` — `rule_type` is `ip` or `origin`
+- `update_node_access_rule(node_id, rule_id, value?, status?)` — change the value, or activate/deactivate
+- `delete_node_access_rule(node_id, rule_id)` — irreversible
+- `set_node_access_rules_status(node_id, status)` — activate or deactivate every rule on the node
+
+How enforcement works:
+
+- A new rule is `deactivated` and does nothing until activated.
+- Active `ip` rules limit which client IPs can call the node. Active `origin` rules
+  limit which `Origin` headers it accepts. When both kinds are active, a request must
+  pass **both**: an allowed IP **and** an allowed `Origin`. Everything else gets
+  HTTP 403 within about 10 seconds.
+- With no active rules, the node is open to any IP and origin.
+- Rules don't affect the Chainstack API, so a lockout can always be undone with these tools.
+
+Values:
+
+- `ip` — one IPv4 or IPv6 address, e.g. `203.0.113.10`. No CIDR ranges; add one rule per address.
+- `origin` — a host name without scheme or path: `app.example.com`, `*.example.com`
+  (the domain and its subdomains), or `*`. Up to 65 characters.
+
+Before activating, confirm with the user that the IP rules cover **every IP that calls
+the node** — their servers, CI, and their own machine. You can't check this for them.
+Origin rules are for browser-only access: once one is active, every request without an
+`Origin` header (servers, scripts, curl) is blocked, **even from an allowed IP**. If the
+user has both a browser app and a backend calling the same node, suggest a separate node
+for each: origin rules on the browser one, IP rules on the backend one.
+
+If correctly configured rules still return 403, it's a support case, not a config fix —
+offer `contact_chainstack` with `category="support"`.
 
 ### Contact Chainstack
 
@@ -259,7 +298,7 @@ Never ask the user to paste their API key in chat. Always use the `$CHAINSTACK_A
 ## Error handling
 
 - **401**: No or invalid API key. Get one at console.chainstack.com > Settings > API keys.
-- **403**: Insufficient permissions for this operation.
+- **403**: Insufficient permissions for this operation. For access rules: the node isn't a Global node, or the organization is on the Developer plan, which can't create them.
 - **404**: Resource not found. Check the ID format (e.g., `ND-123-456-789`, `PR-123-456-789`).
 - **429**: Rate limit exceeded. Wait and retry.
 

@@ -2,6 +2,23 @@
 
 All notable changes to the Chainstack MCP server are documented here. Subscribe to this repo (Watch → Releases) to get notified.
 
+## 2026-10-11
+
+**Node access rules: limit who can call your nodes**
+
+- Five new tools manage a node's [access rules](https://docs.chainstack.com/docs/access-rules), which restrict who can call the node's endpoints by client IP address or by the browser's `Origin` header:
+  - `list_node_access_rules` — list a node's rules, with a note on what they currently enforce
+  - `create_node_access_rule` — add an `ip` or `origin` rule, and optionally activate it in the same call; if an identical rule exists, it's returned instead of a duplicate
+  - `update_node_access_rule` — change a rule's value, or activate or deactivate it
+  - `delete_node_access_rule` — delete a rule
+  - `set_node_access_rules_status` — activate or deactivate every rule on a node at once
+- Access rules work on Global Nodes and need a paid plan; the Developer plan can't create them. New rules start deactivated and do nothing until activated.
+- When IP and origin rules are both active, a request must pass both: an allowed IP **and** an allowed `Origin`. An active origin rule blocks every request without an `Origin` header (servers, scripts, `curl`), even from an allowed IP.
+- An IP rule takes one IPv4 or IPv6 address; CIDR ranges aren't supported. An origin rule takes a host name such as `app.example.com` or `*.example.com`, without a scheme or path.
+- Server instructions and every tool description now fit within Claude Code's 2,048-character limit, so Claude Code shows them in full.
+- Validation errors from the Chainstack API now name the rejected field and the reason. Values you submitted appear as `<value>` in the error text, so they aren't recorded in the server's error tracking.
+- The `chainstack` skill adds a "Restrict node access" workflow (skill v1.6).
+
 ## 2026-10-06
 
 **Dependency refresh, 30-minute idle sessions, more memory headroom**
