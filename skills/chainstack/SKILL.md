@@ -2,7 +2,7 @@
 name: chainstack
 description: Work with the Chainstack MCP server to manage blockchain nodes and projects. Use when deploying nodes, restricting node access with IP or origin allowlists, migrating to Chainstack from another RPC provider such as QuickNode or Alchemy, checking platform status, searching Chainstack docs, contacting the Chainstack team, or interacting with the Chainstack platform API via MCP or curl.
 metadata:
-  version: "1.6"
+  version: "1.6.1"
 ---
 
 # Chainstack MCP Server
@@ -37,7 +37,7 @@ Chainstack has two node tiers. Picking the right one is critical when deploying.
 - Available on all plans including free
 - Best for: getting started, general RPC access
 
-**Trader Nodes** (clouds `CC-0020` through `CC-0028`, provider `chainstack_managed`):
+**Trader Nodes** (provider `chainstack_managed`; cloud IDs vary by region, so take them from `get_deployment_options`):
 - Region-bound, dedicated resources
 - Deploys in 3-6 minutes
 - Paid plans only
@@ -58,9 +58,9 @@ This is a multi-step flow. Always follow this order:
 4. **Create the node**: Call `create_node` with `name`, `project`, `blockchain`, and `cloud` from the previous steps.
 
 Example: to deploy a Trader-tier Ethereum node in London:
-- From `get_deployment_options`, find the entry where `protocol` is "Ethereum", `network` is "Mainnet", and `node_tier` is "Trader" with region "London". Use its `blockchain` (e.g., `BC-000-000-008`) and `cloud` (e.g., `CC-0020`).
+- From `get_deployment_options`, find the entry where `protocol` is "Ethereum", `network` is "Mainnet", `node_tier` is "Trader", and `region_name` is "London". Use its `blockchain` (e.g., `BC-000-000-008`) and its `cloud`.
 - From `list_projects`, pick a project or create one.
-- Call `create_node(name="my-eth-node", project="PR-...", blockchain="BC-000-000-008", cloud="CC-0020")`.
+- Call `create_node(name="my-eth-node", project="PR-...", blockchain="BC-000-000-008", cloud="CC-...")` with that entry's `cloud`.
 
 Trader nodes take 3-6 minutes to deploy. The response returns immediately with `status: "pending"`. Use `get_node` to poll until `status` is `"running"`.
 
@@ -168,12 +168,16 @@ The faucet tops the address **up to the per-network cap** (e.g. 0.5 ETH on sepol
 call fails. Describe the behavior to the user as "top up", and show the returned
 `amountSent` so they see the actual delta sent.
 
-Returns `{network, amountSent, transaction}` on success. On per-address cooldown
-the error message includes `nextFaucetAvailable` (ISO 8601 timestamp) so you can
-tell the user when they can retry.
+Returns `{network, amountSent, transaction, note}` on success; `transaction` is
+usually an explorer link. A success is final even if the balance hasn't updated yet,
+so track `transaction` instead of calling again.
 
-API key required. Rate limiting is tracked per organization by the faucet. If the
-user doesn't have a key, point them to
+One top-up per network every 24 hours. A repeat call for the same network is refused
+(429) if the same organization or the same address got funds there in the last 24
+hours; the error message includes `nextFaucetAvailable` (ISO 8601 timestamp) so you
+can tell the user when they can retry. Other networks have separate cooldowns.
+
+API key required. If the user doesn't have a key, point them to
 https://console.chainstack.com/user/settings/api-keys and have them add it to the
 MCP client config as `Authorization: Bearer <key>`. Never ask the user to paste
 their API key in chat.
