@@ -2,6 +2,16 @@
 
 All notable changes to the Chainstack MCP server are documented here. Subscribe to this repo (Watch → Releases) to get notified.
 
+## 2026-10-12
+
+**Complete project lists, region names, clearer faucet responses**
+
+- `list_projects` now returns every project in organizations with more than 100. Previously the second page repeated the first, so the first 100 projects came back twice and the rest were missing.
+- `get_deployment_options` adds `region_name`, the city for each region code (`lon2` → London), so your agent can match a location without guessing codes. Trader cloud IDs are no longer hardcoded in the server instructions or the skill; they come from `get_deployment_options`.
+- `request_testnet_funds` adds a `note` to a successful response: the funds were sent, the transaction can take a minute to confirm, and calling again for the same network will be refused. Agents were calling again before the balance updated and hitting the cooldown.
+- The faucet cooldown is now described correctly: one top-up per network every 24 hours, refused if the same organization or the same address already got funds on that network. Other networks have separate cooldowns.
+- The `chainstack` skill is updated to match (skill v1.6.1).
+
 ## 2026-10-11
 
 **Node access rules: limit who can call your nodes**
