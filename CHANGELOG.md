@@ -2,6 +2,16 @@
 
 All notable changes to the Chainstack MCP server are documented here. Subscribe to this repo (Watch → Releases) to get notified.
 
+## 2026-10-23
+
+**Tool titles and explicit annotation hints**
+
+- Every tool now has a human-readable title, such as "Create node" or "Search Chainstack docs". Clients that display titles, such as VS Code, show it instead of the raw tool name.
+- Every tool now sets all four MCP annotation hints explicitly: `readOnlyHint`, `destructiveHint`, `idempotentHint` and `openWorldHint`. `idempotentHint` is new: `true` for reads, updates and deletes, and `false` for creates, `contact_chainstack` and `request_testnet_funds`.
+- Tools that only return Chainstack-authored content (`get_deployment_options`, `search_docs`, `get_doc_page`, `get_platform_status`, `get_chainstack_pricing`) are now closed-world (`openWorldHint: false`). VS Code no longer asks you to review their results before your agent sees them.
+- Tools that return project, node or organization data, and every tool that changes something, stay open-world, so clients keep their review and approval prompts for them.
+- No change to tool names, inputs or outputs.
+
 ## 2026-10-12
 
 **Complete project lists, region names, clearer faucet responses**
