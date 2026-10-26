@@ -2,6 +2,18 @@
 
 All notable changes to the Chainstack MCP server are documented here. Subscribe to this repo (Watch → Releases) to get notified.
 
+## 2026-10-26
+
+**Dedicated Nodes labeled correctly, deploys go to Global Nodes**
+
+- `node_tier` now reports "Dedicated" for Dedicated Nodes. Previously it came from the node's provider alone, so Dedicated Nodes showed as "Trader" or "Global". This applies to:
+  - `get_node`
+  - `list_nodes`
+  - `update_node`
+- The server instructions, the `create_node` description and the `chainstack` skill now tell agents to deploy Global Nodes (`node_tier` "Global" in `get_deployment_options`). They no longer recommend Trader Nodes, and existing Trader Nodes still show as "Trader".
+- `create_node` no longer asks your agent to confirm a region first, since Global Nodes are load-balanced across regions.
+- The skill's deploy example now uses the `network` value the API returns, `ethereum-mainnet`, instead of "Mainnet" (skill v1.7).
+
 ## 2026-10-23
 
 **Tool titles and explicit annotation hints**
