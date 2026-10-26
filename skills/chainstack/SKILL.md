@@ -2,7 +2,7 @@
 name: chainstack
 description: Work with the Chainstack MCP server to manage blockchain nodes and projects. Use when deploying nodes, restricting node access with IP or origin allowlists, migrating to Chainstack from another RPC provider such as QuickNode or Alchemy, checking platform status, searching Chainstack docs, contacting the Chainstack team, or interacting with the Chainstack platform API via MCP or curl.
 metadata:
-  version: "1.6.1"
+  version: "1.7"
 ---
 
 # Chainstack MCP Server
@@ -29,22 +29,15 @@ Get an API key at https://console.chainstack.com/user/settings/api-keys
 
 ## Node tiers
 
-Chainstack has two node tiers. Picking the right one is critical when deploying.
-
-**Global Nodes** (cloud `CC-0016`, provider `chainstack_global`):
-- Load-balanced across regions, routes to nearest location
+Deploy **Global Nodes**: options with `node_tier` "Global" in `get_deployment_options`.
+- Cloud `CC-0016` (provider `chainstack_global`), or `CC-0017` (provider `chainstack_partner`) for some networks
+- Load-balanced across regions, routes to the nearest location
 - Deploys instantly
-- Available on all plans including free
-- Best for: getting started, general RPC access
+- Available on all plans, including free
 
-**Trader Nodes** (provider `chainstack_managed`; cloud IDs vary by region, so take them from `get_deployment_options`):
-- Region-bound, dedicated resources
-- Deploys in 3-6 minutes
-- Paid plans only
-- Full and archive modes available
-- Best for: low-latency trading, MEV, heavy indexing
-
-The `node_tier` field in tool responses shows "Global" or "Trader" for clarity.
+The `node_tier` field on existing nodes can also be:
+- "Trader": regional nodes. Don't deploy new ones.
+- "Dedicated": ordered from Chainstack, not through the API.
 
 ## Workflows
 
@@ -52,17 +45,16 @@ The `node_tier` field in tool responses shows "Global" or "Trader" for clarity.
 
 This is a multi-step flow. Always follow this order:
 
-1. **Get deployment options**: Call `get_deployment_options` to see available blockchain/cloud/network combinations. Note the `blockchain` and `cloud` IDs you need.
-2. **Confirm location with the user**: Trader nodes are region-bound (e.g., London, Ashburn, Singapore). Always show the user the available regions and ask which one before deploying. Region affects latency and cannot be changed after deployment.
-3. **Get or create a project**: Call `list_projects` to find an existing project, or `create_project` to make a new one. Note the project `id` (format: `PR-123-456-789`).
-4. **Create the node**: Call `create_node` with `name`, `project`, `blockchain`, and `cloud` from the previous steps.
+1. **Get deployment options**: Call `get_deployment_options` to see available blockchain/cloud/network combinations. Pick a Global option (`node_tier` "Global") and note its `blockchain` and `cloud` IDs.
+2. **Get or create a project**: Call `list_projects` to find an existing project, or `create_project` to make a new one. Note the project `id` (format: `PR-123-456-789`).
+3. **Create the node**: Call `create_node` with `name`, `project`, `blockchain`, and `cloud` from the previous steps.
 
-Example: to deploy a Trader-tier Ethereum node in London:
-- From `get_deployment_options`, find the entry where `protocol` is "Ethereum", `network` is "Mainnet", `node_tier` is "Trader", and `region_name` is "London". Use its `blockchain` (e.g., `BC-000-000-008`) and its `cloud`.
+Example: to deploy an Ethereum Mainnet node:
+- From `get_deployment_options`, find the entry where `network` is "ethereum-mainnet" and `node_tier` is "Global". Use its `blockchain` (`BC-000-000-008`) and `cloud` (`CC-0016`).
 - From `list_projects`, pick a project or create one.
-- Call `create_node(name="my-eth-node", project="PR-...", blockchain="BC-000-000-008", cloud="CC-...")` with that entry's `cloud`.
+- Call `create_node(name="my-eth-node", project="PR-...", blockchain="BC-000-000-008", cloud="CC-0016")`.
 
-Trader nodes take 3-6 minutes to deploy. The response returns immediately with `status: "pending"`. Use `get_node` to poll until `status` is `"running"`.
+The response returns immediately with `status: "pending"`. Use `get_node` to poll until `status` is `"running"`.
 
 ### Check platform status
 
@@ -74,7 +66,7 @@ No API key needed.
 
 Call `search_docs(query="...")` with a natural language query. Returns a list of `{title, link, page, snippet}` for matching docs.chainstack.com pages.
 
-To get the full content of a page, pass the `page` field from a search result straight into `get_doc_page(page=...)`. Example: search returns `{"title": "Ethereum trader nodes", "page": "docs/ethereum-trader-nodes", ...}` → call `get_doc_page(page="docs/ethereum-trader-nodes")`. The full URL from `link` is also accepted (the leading domain, leading slash, anchor, and `.mdx` extension are all stripped automatically).
+To get the full content of a page, pass the `page` field from a search result straight into `get_doc_page(page=...)`. Example: search returns `{"title": "Ethereum tooling", "page": "docs/ethereum-tooling", ...}` → call `get_doc_page(page="docs/ethereum-tooling")`. The full URL from `link` is also accepted (the leading domain, leading slash, anchor, and `.mdx` extension are all stripped automatically).
 
 No API key needed. Useful for finding RPC method references, deployment guides, and API examples.
 
