@@ -2,7 +2,7 @@
 
 The Chainstack MCP server gives AI agents direct access to the Chainstack platform — deploy blockchain nodes, search documentation, and check platform status from any coding environment.
 
-**Live at [`mcp.chainstack.com`](https://mcp.chainstack.com)**
+**Live at [`mcp.chainstack.com`](https://mcp.chainstack.com/?utm_source=github&utm_medium=referral&utm_campaign=mcp-server)**
 
 ## Quick start
 
@@ -23,7 +23,7 @@ The agent will fetch the onboarding page and walk you through setup. Works with 
 - `contact_chainstack` — send a message to Chainstack (sales, support, or general questions)
 - `get_chainstack_pricing` — live pricing snapshot: plan tiers, feature matrix, add-ons, and the per-chain dedicated-node catalog
 
-**API key required** ([get one here](https://console.chainstack.com/user/settings/api-keys)):
+**API key required** ([create a Chainstack account](https://console.chainstack.com/sign-up?utm_source=github&utm_medium=referral&utm_campaign=mcp-server), then [get an API key](https://console.chainstack.com/user/settings/api-keys?utm_source=github&utm_medium=referral&utm_campaign=mcp-server)):
 - `get_organization`, `list_projects`, `create_project`, `get_project`, `update_project`, `delete_project`
 - `list_nodes`, `get_node`, `create_node`, `update_node`, `delete_node`, `get_deployment_options`
 - `list_node_access_rules`, `create_node_access_rule`, `update_node_access_rule`, `delete_node_access_rule`, `set_node_access_rules_status` — restrict a Global Node to allowed IP addresses or origins
@@ -56,7 +56,7 @@ Neither needs an API key, which covers every tool that works unauthenticated.
 claude mcp add --transport http chainstack https://mcp.chainstack.com/mcp -s user
 ```
 
-See [full setup guide](https://docs.chainstack.com/docs/chainstack-mcp-server) for all agents.
+See [full setup guide](https://docs.chainstack.com/docs/chainstack-mcp-server?utm_source=github&utm_medium=referral&utm_campaign=mcp-server) for all agents.
 
 ## MCP registries
 
@@ -80,6 +80,6 @@ Use [Issues](https://github.com/chainstacklabs/mcp-server/issues) to:
 
 ## Links
 
-- [Discovery page](https://mcp.chainstack.com/) — agent-readable onboarding
-- [Skill file](https://mcp.chainstack.com/skill) — for on-demand usage
-- [Documentation](https://docs.chainstack.com/docs/chainstack-mcp-server)
+- [Discovery page](https://mcp.chainstack.com/?utm_source=github&utm_medium=referral&utm_campaign=mcp-server) — agent-readable onboarding
+- [Skill file](https://mcp.chainstack.com/skill?utm_source=github&utm_medium=referral&utm_campaign=mcp-server) — for on-demand usage
+- [Documentation](https://docs.chainstack.com/docs/chainstack-mcp-server?utm_source=github&utm_medium=referral&utm_campaign=mcp-server)
